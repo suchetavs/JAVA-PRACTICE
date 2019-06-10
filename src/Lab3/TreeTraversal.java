@@ -1,6 +1,7 @@
 package Lab3;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -10,18 +11,18 @@ import java.util.regex.Pattern;
 
 public class TreeTraversal {
 	List<String> k_nodes=new ArrayList<String>();
+	List<String> level_order=new ArrayList<String>();
 	Node head=null;
 	Node target_node=null;
 	int distance;
 	
+	
 	public void MakeTree(String input) {
 		int index = 0;
-		
 		Node current_node = null;	
-		
-				
+						
 		Matcher m=Pattern.compile("([A-Za-z0-9]+)").matcher(input);
-		System.out.println(input);
+		//System.out.println(input);
 		if(m.find(1))
 			{
 			head=new Node(m.group(),null,null,null);
@@ -75,7 +76,8 @@ public class TreeTraversal {
 		q.add(node);
 		while(!q.isEmpty()) {
 			if(!q.element().data.equalsIgnoreCase("null"))
-				System.out.print(q.element().data+" ");
+				{//System.out.print(q.element().data+" ");
+				level_order.add(q.element().data);}
 			if(q.element().left!=null)
 				q.add(q.element().left);
 			if(q.element().right!=null)
@@ -85,6 +87,7 @@ public class TreeTraversal {
 		
 		
 	}
+	
 	
 	
 	public  void find_node(Node node,String data) {
@@ -116,8 +119,8 @@ public class TreeTraversal {
 		if(dist==0)
 		{
 			k_nodes.add(node.data);
-			System.out.println("In move down "+node.data);
-			System.out.println(k_nodes);
+			//System.out.println("In move down "+node.data);
+			//System.out.println(k_nodes);
 			return;
 		}
 		
@@ -130,44 +133,58 @@ public class TreeTraversal {
 	
 	
 	public void nodeAtk(String node, int distance) {
-		System.out.println(k_nodes);
+	//	System.out.println(k_nodes);
 		find_node(head,node);
 		movedown(target_node,distance);
 		while(distance>0 && target_node!=head ) {
 			Node current_node=target_node.parent;
 			--distance;
 			if(distance==0)
-				{k_nodes.add(current_node.data);System.out.println("In while loop "+current_node.data);break;}
+				{k_nodes.add(current_node.data);break;}
 			if(current_node.left==target_node)
 				movedown(current_node.right,distance-1);
 			else
 				movedown(current_node.left,distance-1);
 			target_node=current_node;
 			
-		}
-		System.out.println(k_nodes);
+				}
+		//System.out.println(k_nodes);
 			
 	}
 		
 	
 	public static void main(String[] args) {
 		TreeTraversal tree=new TreeTraversal();
-		
+		//ListComparator lc=new ListComparator(k_nodes);
 		Scanner in =new Scanner(System.in);
 		List<String> lines=new ArrayList<String>();
 		for(int i=0;i<4;i++)
 			lines.add(in.nextLine());
-		System.out.println(lines.get(0));
+	//	System.out.println(lines.get(0));
 		in.close();
 		tree.distance=Integer.parseInt(lines.get(2));
 		
 		tree.MakeTree(lines.get(0));
 		tree.nodeAtk(lines.get(1), tree.distance);
+		System.out.println(tree.k_nodes);
+		Collections.sort(tree.k_nodes, new ListComparator(tree.level_order));
+		//System.out.println(tree.k_nodes);
+		for(String data:tree.level_order)
+			System.out.print(data+" ");
+		String kNodes="";
+		for(String data:tree.k_nodes)
+		{
+		kNodes+=data+" ";
+		}
+		if(kNodes.length()>0)
+		System.out.print(kNodes.substring(0, kNodes.length()-1));
+		}
 		
 
 }
+
 			
-}
+
 
 
 
