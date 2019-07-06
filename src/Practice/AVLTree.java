@@ -50,10 +50,7 @@ public class AVLTree {
 		
 		return (1+Math.max(find_height(node.left), find_height(node.left)));
 	}
-		
-		
-	
-	
+			
 	
 
 	public static void main(String[] args) {
